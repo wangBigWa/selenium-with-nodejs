@@ -1,0 +1,22 @@
+{
+  "name": "selenium-with-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.0.0-alpha.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangBigWa/selenium-with-nodejs.git"
+  },
+  "author": "wangyanfeng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wangBigWa/selenium-with-nodejs/issues"
+  },
+  "homepage": "https://github.com/wangBigWa/selenium-with-nodejs#readme"
+}
