@@ -1,5 +1,5 @@
-var { Builder, By } = require('selenium-webdriver');
-var chrome = require("selenium-webdriver/chrome");
+let { Builder, By } = require('selenium-webdriver');
+let chrome = require("selenium-webdriver/chrome");
 
 var driver = new Builder()
 .forBrowser('chrome')
@@ -44,3 +44,85 @@ async function elementLocation() {
 	// By.xpath 通过xpath定位元素 获取类名为text-primary的span元素
 	let dom8 = await driver.findElements(By.xpath('//span[@class="text-primary"]'))
 }
+
+// 获取属性值
+async function getAttribute() {
+	// 最大化屏幕
+	await driver.manage().window().maximize();
+	
+	await driver.get('http://www.htmimi.com/index.aspx');
+	
+	// 获取页面源码
+	let code = await driver.getPageSource();
+	
+	// 获取页面标题
+	let title = await driver.getTitle();
+	
+	// 获取当前页面URL
+	let currentUrl = await driver.getCurrentUrl();
+	
+	let element = await driver.findElement(By.id('footer'));
+	
+	// 获取标签内文字
+	let text = await element.getText();
+	
+	// 获取tag名称
+	let tagName = await element.getTagName();
+	
+	// 获取服务器分配的id
+	let id = await element.getId();
+	
+	// 获取元素的CSS值 必传参数，若不传，返回空字符串
+	let cssValue = await element.getCssValue('zIndex');
+	
+	// 获取元素的属性值 必传参数，若不传会报错
+	let attributeValue = await element.getAttribute('class');
+	
+	// 获取元素的宽高以及左上角的x,y坐标
+	let size = await element.getRect();
+}
+
+// 截图操作
+async function screenShot() {
+	// 最大化屏幕
+	await driver.manage().window().maximize();
+	
+	await driver.get('http://www.htmimi.com/index.aspx');
+	
+	let element = await driver.findElement(By.id('footer'));
+	
+	let size = await element.getRect();
+	
+	let imgBase64 = await driver.takeScreenshot();
+	
+	// 已知dom宽高坐标、屏幕截图base64，使用插件生成相应位置的图片文件即可
+}
+
+// 浏览器前进后退
+async function navigate() {
+	// 最大化屏幕
+	await driver.manage().window().maximize();
+	
+	await driver.get('http://www.htmimi.com/index.aspx');
+	
+	await driver.navigate().to('http://www.baidu.com');
+	
+	await driver.navigate().to('http://www.sohu.com');
+	
+	// 上一页
+	await driver.navigate().back();
+	console.log('我回到了上一页百度');
+	
+	// 下一页
+	await driver.navigate().forward();
+	console.log('我回到了下一页搜狐');
+	
+	// 刷新
+	await driver.navigate().refresh();
+	console.log('我刷新了一下');
+}
+// openAndMaxWindow();
+// elementLocation();
+// getAttribute();
+// screenShot();
+navigate();
