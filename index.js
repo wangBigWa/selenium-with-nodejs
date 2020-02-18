@@ -121,8 +121,31 @@ async function navigate() {
 	await driver.navigate().refresh();
 	console.log('我刷新了一下');
 }
+
+// 模拟登陆
+async function login() {
+	// 最大化屏幕
+	await driver.manage().window().maximize();
+	
+	await driver.get('https://ht-yunying-test.htmimi.com/2.0/login-yy');
+	
+	let accountEl = await driver.findElement(By.css('.m-login-input.accounts'));
+
+	let passwordEl = await driver.findElement(By.css('.m-login-input.password'));
+
+	let button = await driver.findElement(By.css('.m-login-loginbtn'));
+
+	await accountEl.sendKeys('wyftest001');
+
+	await passwordEl.sendKeys('gzhd456@htmimi789');
+
+	await button.click();
+}
+
+
 // openAndMaxWindow();
 // elementLocation();
 // getAttribute();
 // screenShot();
-navigate();
+// navigate();
+login();
