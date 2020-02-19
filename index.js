@@ -1,4 +1,4 @@
-let { Builder, By } = require('selenium-webdriver');
+let { Builder, By, until } = require('selenium-webdriver');
 let chrome = require("selenium-webdriver/chrome");
 
 var driver = new Builder()
@@ -15,10 +15,8 @@ async function openAndMaxWindow() {
 
 // 元素定位的例子
 async function elementLocation() {
-	// 最大化屏幕
-	await driver.manage().window().maximize();
 	
-	await driver.get('http://www.htmimi.com/index.aspx');
+	await openAndMaxWindow();
 	
 	// By.className() 获取类名是nav的所有元素，返回一个webElement的list
 	let dom1 = await driver.findElements(By.className('nav'));
@@ -47,10 +45,8 @@ async function elementLocation() {
 
 // 获取属性值
 async function getAttribute() {
-	// 最大化屏幕
-	await driver.manage().window().maximize();
 	
-	await driver.get('http://www.htmimi.com/index.aspx');
+	await openAndMaxWindow();
 	
 	// 获取页面源码
 	let code = await driver.getPageSource();
@@ -84,10 +80,8 @@ async function getAttribute() {
 
 // 截图操作
 async function screenShot() {
-	// 最大化屏幕
-	await driver.manage().window().maximize();
 	
-	await driver.get('http://www.htmimi.com/index.aspx');
+	await openAndMaxWindow();
 	
 	let element = await driver.findElement(By.id('footer'));
 	
@@ -100,10 +94,8 @@ async function screenShot() {
 
 // 浏览器前进后退
 async function navigate() {
-	// 最大化屏幕
-	await driver.manage().window().maximize();
 	
-	await driver.get('http://www.htmimi.com/index.aspx');
+	await openAndMaxWindow();
 	
 	await driver.navigate().to('http://www.baidu.com');
 	
@@ -142,10 +134,46 @@ async function login() {
 	await button.click();
 }
 
+async function formOperate() {
+	
+	await login();
+	
+	await driver.sleep(3000);
+	
+	await driver.navigate().to('https://ht-yunying-test.htmimi.com/2.0/marketing/coupon/coupon-list/add/4');
+	
+	await driver.sleep(3000);
+	
+	let items = await driver.findElements(By.css('.col-2'));
+	
+	/* ant input元素查找、写入值的示例 */
+	let couponNameEl = await items[0].findElement(By.css('input'));
+	await couponNameEl.sendKeys('超级无敌优惠券');
+	
+	/* ant select组件元素查找、选中值的示例 */
+	// 先找到select框的dom，类名为.ant-select-selection，click一下
+	let businessSelectEl = await items[1].findElement(By.css('.ant-select-selection'));
+	await businessSelectEl.click();
+	// 然后等待页面中出现下拉项的dom，类名为.ant-select-dropdown-menu的ul
+	await driver.wait(until.elementLocated(By.css('.ant-select-dropdown-menu')), 2000);
+	// 选中第二个选项
+	let selectLis = await driver.findElements(By.css('.ant-select-dropdown-menu > li'));
+	await selectLis[1].click();
+	await driver.sleep(2000);
+	
+	/* ant radio组件元素查找、选中值的示例 */
+	console.log(items.length);
+	let couponTypeEl = await items[3].findElements(By.css('.ant-radio-group label'));
+	console.log(couponTypeEl.length);
+	await couponTypeEl[1].click();
+	await driver.sleep(1000);
+}
+
 
 // openAndMaxWindow();
 // elementLocation();
 // getAttribute();
 // screenShot();
 // navigate();
-login();
+// login();
+formOperate();
