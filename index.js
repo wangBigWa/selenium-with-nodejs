@@ -1,5 +1,6 @@
-let { Builder, By, until } = require('selenium-webdriver');
+let { Builder, By, until, Key } = require('selenium-webdriver');
 let chrome = require("selenium-webdriver/chrome");
+let path = require('path');
 
 var driver = new Builder()
 .forBrowser('chrome')
@@ -169,6 +170,61 @@ async function formOperate() {
 	await driver.sleep(1000);
 }
 
+// 模拟鼠标操作
+async function mouseOperate() {
+	
+	const actions = driver.actions();
+	
+	let pt = path.resolve(__dirname, 'index.html');
+	
+	// 最大化屏幕
+	await driver.manage().window().maximize();
+	
+	await driver.get(pt);
+	
+	let div1 = await driver.findElement(By.id('div1'));
+	
+	let div2 = await driver.findElement(By.id('div2'));
+	
+	let button = await driver.findElement(By.id('button'));
+	
+	await actions
+	.keyDown(Key.CONTROL) // 按下某个键 按下Ctrl
+	.pause(1000) // 停止1000毫秒
+	.keyUp(Key.CONTROL) // 释放某个键
+	.keyDown(Key.SPACE) // 按下空格
+	.pause(1000)
+	.keyUp(Key.SPACE)
+	.keyDown(Key.SHIFT) // 按下shift
+	.pause(1000)
+	.keyUp(Key.SHIFT)
+	.pause(1000)
+	.move({ // 移动  只传origin，即鼠标移动到origin的位置
+		origin: div1, // 起点，1.传入一个页面元素2.不传：鼠标当前位置
+	})
+	.pause(2000)
+	.move({ // 不传origin，即从鼠标当前位置进行偏移 移出div1
+		duration: 1000,
+		x: 250,
+		y: 250,
+	})
+	.click(div2) // 单击div2
+	.pause(2000)
+	.doubleClick(div2) // 双击div2
+	.pause(2000)
+	.click(button) // 点击按钮
+	.pause(2000)
+	.perform();
+	
+	// 关闭alert
+	let alert = await driver.switchTo().alert();
+	let text = await alert.getText();
+	console.log(`alert中的文字是${text}`);
+	await driver.sleep(2000);
+	await alert.accept(); // 关闭弹窗
+	await driver.sleep(2000);
+	await driver.quit(); // 退出并关闭浏览器
+}
 
 // openAndMaxWindow();
 // elementLocation();
@@ -176,4 +232,5 @@ async function formOperate() {
 // screenShot();
 // navigate();
 // login();
-formOperate();
+// formOperate();
+mouseOperate();

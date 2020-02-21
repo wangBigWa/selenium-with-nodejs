@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试鼠标操作的页面</title>
+    <style>
+        html, body, div, ul, li, p {
+            padding: 0; margin: 0;
+        }
+        li {
+            list-style: none;
+        }
+        #div1 {
+            margin: 20px 0 0 20px; background: pink; width: 200px; height: 200px;
+        }
+        #div2 {
+            margin: 20px 0 0 20px; background: orange; width: 200px; height: 200px;
+        }
+        #div3 {
+            margin: 20px 0 0 20px; width: 500px; height: 200px;
+        }
+        #div3 ul {
+            margin-top: 10px; overflow: auto;
+        }
+        #div3 ul > li {
+            width: 100px; height: 30px; margin: 0 0 20px 20px; float: left;
+            border: 1px solid black; text-align: center; line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">
+    <p>我的宽度为200px，高度为200px，左上角坐标为(20, 20)</p>
+    <p>我的颜色是<b>粉色</b>，鼠标悬浮变为<b>红色</b>，移出变回<b>绿色</b></p>
+</div>
+<div id="div2">
+    <p>我的宽度为200px，高度为200px，左上角坐标为（20, 240）</p>
+    <p>我的颜色是<b>橙色</b>，单击我变为<b>红色</b>，双击我变为<b>绿色</b></p>
+</div>
+
+<div id="div3">
+    <p>下面是一些键盘的按键，当相应键位被按下时，颜色变为红色，释放变为白色</p>
+    <ul>
+        <li id="up">↑</li>
+        <li id="down">↓</li>
+        <li id="left">←</li>
+        <li id="right">→</li>
+        <li id="ctrl">ctrl</li>
+        <li id="shift">shift</li>
+        <li id="space">space</li>
+    </ul>
+</div>
+<button id="button">点我</button>
+<script src="./lib/real-jquery.js"></script>
+<script>
+    $(function() {
+    	let div1 = $('#div1');
+    	let div2 = $('#div2');
+	    div1.mouseover(function() {
+    		let bg = div1.css('background');
+    		if (bg !== 'red') {
+    			div1.css('background', 'red');
+            }
+        });
+	    div1.mouseout(function() {
+		    let bg = div1.css('background');
+		    if (bg !== 'green') {
+			    div1.css('background', 'green');
+		    }
+	    });
+        div2.click(function() {
+	        let bg = div2.css('background');
+	        if (bg !== 'red') {
+		        div2.css('background', 'red');
+	        }
+        });
+	    div2.dblclick(function() {
+		    let bg = div2.css('background');
+		    if (bg !== 'green') {
+			    div2.css('background', 'green');
+		    }
+	    });
+
+	    $(document).keydown(function(event){
+		    $(`#${getButtonByKeyCode(event.keyCode)}`).css('background', 'red');
+	    });
+
+	    $(document).keyup(function(event){
+		    $(`#${getButtonByKeyCode(event.keyCode)}`).css('background', 'white');
+	    });
+
+	    $('#button').click(function() {
+	    	alert('我被点了一下');
+        });
+
+	    function getButtonByKeyCode(keyCode) {
+	    	let result = '';
+	    	switch(keyCode) {
+                case 38:
+                	result = 'up';
+                	break;
+			    case 40:
+				    result = 'down';
+				    break;
+			    case 37:
+				    result = 'left';
+				    break;
+			    case 39:
+				    result = 'right';
+				    break;
+			    case 17:
+				    result = 'ctrl';
+				    break;
+			    case 16:
+				    result = 'shift';
+				    break;
+			    case 32:
+				    result = 'space';
+				    break;
+                default:
+                	result = '';
+            }
+            return result;
+        }
+    });
+</script>
+</body>
+</html>
